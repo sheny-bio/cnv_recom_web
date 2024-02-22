@@ -1,0 +1,327 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CNV recom</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="{% static 'layuiadmin/layui/css/layui.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'layuiadmin/style/admin.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'css/icono.min.css' %}" media="all">
+</head>
+
+<style>
+    .layui-table-tool {
+        background-color: #FEFFFF;
+    }
+
+    .layui-table {
+        width: 100%;
+        margin: 15px 0;
+        border: 0;
+    }
+
+    .layui-table th {
+        background-color: #C3E7FA;
+        color: #000000
+    }
+
+    .layui-table th, .layui-table td {
+        border: 1px solid #dcf1fc;
+        border-width: 1px 0 1px 0
+    }
+
+    .layui-table tr {
+        border: 1px solid #dcf1fc;
+    }
+
+    .layui-table tr:nth-child(odd) {
+        background-color: #ebf7fd;
+    }
+
+    .layui-table tr:nth-child(even) {
+        background-color: #fdfdfd;
+    }
+
+    .layui-table-view .layui-table[lay-size=sm] .layui-table-cell {
+        height: 26px;
+        line-height: 20px;
+    }
+
+    .layui-tab-title {
+
+        line-height: 80px;
+        height: 110px;
+        font-size: 16px;
+
+    }
+
+    .layui-tab-brief > .layui-tab-title .layui-this {
+        color: #7CADED;
+    }
+
+</style>
+
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-row  layui-col-space10">
+
+        <div class="layui-col-md6 layui-col-lg6 layui-col-sm6">
+            <div class="layui-row layui-bg-white">
+
+                <div class="layui-row" style="height: 100px">
+                    <div class="layui-col-md10  layui-col-lg10 layui-col-sm10">
+                        <div style="font-size: 16px; padding-top: 30px; padding-left: 30px">二代测序样本拷贝数变异检测软件推荐系统</div>
+                    </div>
+                    <div class="layui-col-md2  layui-col-lg2 layui-col-sm2">
+                        <div style="font-size: 16px; padding-top: 30px">
+                            <a href="{% url 'download_demo' %}" target="_blank" id="demo" style="padding-left: 10px; color: #7CADED">使用示例</a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="layui-row" style="height: 780px">
+
+                    <form class="layui-form layui-row" style="padding-top: 50px" action="">
+
+                        <div class="layui-col-md10  layui-col-lg10 layui-col-sm10 layui-form-item">
+                            <label class="layui-form-label"><span style="color: red">*</span>输入文件:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="title" id="input_upload" lay-verify="required"
+                                       placeholder="-c case.bam case.bam.bai -n control.bam control.bam.bai -t chip.bed"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md2  layui-col-lg2 layui-col-sm2" , style="padding-left: 12px">
+                            <button type="button" class="icono-trash" id="trash_file" style="color: gray"></button>
+                            <i class="icono-eye" style="color: #7CADED; padding-left: 6px"></i>
+                        </div>
+
+                        <div class="layui-col-md10  layui-col-lg10 layui-col-sm10 layui-form-item">
+                            <label class="layui-form-label"><span style="color: red">*</span>输入参数:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="args" lay-verify="required" id="args"
+                                       placeholder="-p purity -l read length -d sampleDepth"
+                                       autocomplete="off" class="layui-input">
+{#                                -p 0 -l 101 -d 100#}
+                            </div>
+                        </div>
+                        <div class="layui-col-md2  layui-col-lg2 layui-col-sm2", style="padding-left: 12px">
+                            <i class="icono-trash"  id="trash_args" style="color: gray"></i>
+                            <i class="icono-eye" style="color: #7CADED; padding-left: 6px"></i>
+                        </div>
+
+                        <div class="layui-col-md10  layui-col-lg10 layui-col-sm10 layui-form-item">
+                            <label class="layui-form-label"><span style="color: red">*</span>输出目录:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="output" lay-verify="required" id="output"
+                                       placeholder="我的数据/我的空间(-o CNVrecomReport.tsv)"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+
+                        <input type="text" name="job_id" id="job_id" required lay-verify="required" value="{{ job_id }}" style="display: none">
+
+
+                        <div class="layui-form-item layui-col-md-offset7" style="padding-top: 20px">
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn" id="btn-upload" style="background:  #7CADED">提交任务</button>
+                                <button class="layui-btn" lay-submit lay-filter="form-submit" id="form-submit"
+                                        style="display: none">
+                                </button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="layui-col-md6">
+            <div class="layui-row layui-bg-white" style="height: 900px">
+
+                <div class="layui-tab layui-tab-brief" lay-filter="TabBrief"
+                     style="margin-top: 0px; margin-left: 25px; margin-right: 25px">
+                    <ul class="layui-tab-title">
+                        <li id="head1" class="layui-this">工具介绍</li>
+                        <li id="head2">参数说明</li>
+                        <li id="head3">报告预览</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div id="body1" class="layui-tab-item  layui-show">
+                            <h2 style="padding-bottom: 25px; font-weight: bold;">工具简介</h2>
+                            <p>
+                                CNVrecom是基于元学习、元路径和深度图神经网络等技术开发的拷贝数突变（CNVs）检测软件推荐算法。我们将用户选择CNV检测工具（CDT）的问题转化为基于元学习框架为用户自动推荐工具的问题。元学习可以通过从大量训练数据中学习，捕获多个标准之间的复杂关系。它可以根据样本的个体特征和需求生成个性化的推荐。元学习模型的一个关键优势是它们能够快速学习并适应新的样本。通过利用复杂的元学习模型，我们可以有效地解决整合多个标准的问题，并为CNV检测软件提供更准确和个性化的推荐。我们使用元特征和元路径构建元路径异质图，这不仅充分利用了测序样本和CDT特性，而且增强了推荐的语义解释。元路径异质图的优点在于它们能够捕获CNV检测问题中样本和工具之间的复杂关系。具体来说，元路径异质图结合了样本和CNV检测工具的特性，允许通过定义不同的元路径和扩充训练集来建模它们的关联。这使得我们能够更全面地捕获样本和工具之间的交互和依赖关系，从而提高CNV检测软件的推荐准确性和性能。最后，我们通过结合元路径异质图和元目标和基于R-GCN的编码器开发了一个推荐模型。因此，CNVrecom可以根据测序样本的特性自动为用户推荐适合的CNV工具，而不需要用户具备领域知识。CNVrecom对于医学应用中的CNV检测工具很有帮助，能够为CNVs检测工具的选择和使用提供更加科学、系统和有效的指导，从而提高CNVs的精准检出，更深入地理解疾病的发生机制，为疾病的诊断和治疗提供新的思路。</p>
+                            <h2 style="padding-bottom: 25px; padding-top: 50px; font-weight: bold;">注意事项</h2>
+                            <p>更多内容见：CNVrecom: How to Recommend the Suitable Copy Number Variations Detection Tools
+                                for Users?</p>
+
+
+                        </div>
+                        <div id="body2" class="layui-tab-item">
+                            <p style="font-weight: bold; padding-bottom: 10px">-c case.bam, case.bam.bai</p>
+                            <p style=" padding-bottom: 20px">输入case样本的bam，需要sort和index</p>
+                            <p style="font-weight: bold; padding-bottom: 10px">-n control.bam, control.bam.bai</p>
+                            <p style=" padding-bottom: 20px">输入control样本的bam，需要sort和index</p>
+                            <p style="font-weight: bold; padding-bottom: 10px">-t chip.bed</p>
+                            <p style=" padding-bottom: 20px">输入样本测序捕获区间</p>
+                            <p style="font-weight: bold; padding-bottom: 10px">-p purity</p>
+                            <p style=" padding-bottom: 20px">如：-t 0.6
+                                表述输入的肿瘤纯度为0.6。注：输入样本的肿瘤纯度，推荐使用ABSOLUTE工具估计样本的肿瘤纯度。</p>
+                            <p style="font-weight: bold; padding-bottom: 10px">-l read length</p>
+                            <p style=" padding-bottom: 20px">如：-l 150。
+                                表示输入的read的长度为150bp。注：可用samtools或者pysam等工具得出。</p>
+                            <p style="font-weight: bold; padding-bottom: 10px">-d sampleDepth</p>
+                            <p style=" padding-bottom: 20px">如：-l 100。
+                                表示输入样本的平均深度为100X。注：可用samtools或者pysam等工具得出。</p>
+                            <p style="font-weight: bold; padding-bottom: 10px">-o CNVrecomReport.tsv</p>
+                            <p style=" padding-bottom: 20px">输出CNVrecom推荐结果的Report文件。</p>
+
+                        </div>
+                        <div id="body3" class="layui-tab-item">
+                            <table id="result" lay-filter="result"></table>
+                            <p style="color: grey; padding-top: 20px">报告解释：CNVrecomReport.tsv中第一行表示选取的元目标，第二行表示对应选取的元目标下CNVrecom推荐的结果。</p>
+                            <p style="color: grey">如：第一列表示以Sensitivity为元目标时CNVrecom推荐该样本使用contra做为该样本的CNV检测工具。</p>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<script src="{% static '/js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static '/layuiadmin/layui/layui.js' %}"></script>
+
+<script>
+
+    layui.config({
+        base: '{% static "layuiadmin/" %}'
+    }).extend({
+        index: 'lib/index',
+    }).use(['index', 'form', 'table', 'upload', 'colorpicker'], function () {
+        let $ = layui.$
+            , layer = layui.layer
+            , upload = layui.upload
+            , table = layui.table
+            , form = layui.form;
+
+
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+
+        table.render({
+            elem: '#result'
+            , page: false
+            ,data: []
+            , cols: [[ //表头
+                {field: 'meta-target-Sensitivity', title: 'meta-target-Sensitivity', align: "center"}
+                , {field: 'meta-target-Precision', title: 'meta-target-Precision', align:  "center"}
+                , {field: 'meta-target-F1_score', title: 'meta-target-F1_score', align:  "center"}
+            ]]
+        });
+
+        {#上传文件#}
+        let uploadInst = upload.render({
+            elem: '#input_upload',
+            auto: false,
+            bindAction: '#btn-upload',
+            accept: "file",
+            acceptMime: "file/zip",
+            url: "{% url 'upload' %}",
+            method: 'post',
+            data: {job_id: $('#job_id').val()},
+            choose: function (obj) {
+                obj.preview(function (index, file, result) {
+                    $('#input_upload').val(file.name); // 将文件名显示在输入框中
+                });
+            },
+            before: function (obj) {
+
+                if ( $("#args").val() === '' ) {
+                    layer.msg("请填写正确的参数");
+                    return false;
+                } else if ( $("#output").val() === '' ) {
+                    layer.msg("请填写正确的输出目录");
+                    return false;
+                } else {
+                    layer.load(1, {shade: 0.3}); //上传loading
+                }
+
+            },
+            done: function (res) {
+                // 成功后提交表单
+                layer.closeAll();
+                console.log("上传成功");
+                $("#form-submit").click();
+            },
+            error: function () {
+                // 上传失败的回调函数
+                layer.closeAll();
+                layer.msg('上传失败');
+            },
+        });
+
+        form.on('submit(form-submit)', function (data) {
+            layer.load(1, {shade: 0.3});
+            $.ajax({
+                url: '{% url "analyze" %}',
+                type: 'POST',
+                data: data["field"],
+                success: function (response) {
+
+                    // 重载结果表
+                    table.reload("result", {data: response["data"]});
+                    $("#head1").attr("class", "");
+                    $("#head2").attr("class", "");
+                    $("#head3").attr("class", "layui-this");
+
+                    $("#body1").attr("class", "layui-tab-item ");
+                    $("#body2").attr("class", "layui-tab-item ");
+                    $("#body3").attr("class", "layui-tab-item  layui-show");
+
+                    layer.closeAll();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    layer.closeAll();
+                    layer.msg("数据分析出错。");
+                    console.error(textStatus, errorThrown); // 处理错误响应
+                }
+            });
+
+            return false;
+        });
+
+        // 垃圾桶按钮
+        $("#trash_file").click(function () {
+            uploadInst.reload();
+            $("#input_upload").val(undefined);
+        });
+
+        $("#trash_args").click(function () {
+            uploadInst.reload();
+            $("#args").val(undefined);
+        })
+
+
+
+    });
+</script>
+</body>
+</html>

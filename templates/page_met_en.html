@@ -1,0 +1,396 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CNV MET</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="{% static 'layuiadmin/layui/css/layui.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'layuiadmin/style/admin.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'css/icono.min.css' %}" media="all">
+</head>
+
+<style>
+    .layui-table-tool {
+        background-color: #FEFFFF;
+    }
+
+    .layui-table {
+        width: 100%;
+        margin: 15px 0;
+        border: 0;
+    }
+
+    .layui-table th {
+        background-color: #C3E7FA;
+        color: #000000
+    }
+
+    .layui-table th, .layui-table td {
+        border: 1px solid #dcf1fc;
+        border-width: 1px 0 1px 0
+    }
+
+    .layui-table tr {
+        border: 1px solid #dcf1fc;
+    }
+
+    .layui-table tr:nth-child(odd) {
+        background-color: #ebf7fd;
+    }
+
+    .layui-table tr:nth-child(even) {
+        background-color: #fdfdfd;
+    }
+
+    .layui-table-view .layui-table[lay-size=sm] .layui-table-cell {
+        height: 26px;
+        line-height: 20px;
+    }
+
+    .layui-tab-title {
+
+        line-height: 80px;
+        height: 110px;
+        font-size: 16px;
+
+    }
+
+    .layui-tab-brief > .layui-tab-title .layui-this {
+        color: #7CADED;
+    }
+
+</style>
+
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-row  layui-col-space10">
+
+        <div class="layui-col-md6 layui-col-lg6 layui-col-sm6">
+            <div class="layui-row layui-bg-white">
+
+                <div class="layui-row" style="height: 100px">
+                    <div class="layui-col-md10  layui-col-lg10 layui-col-sm10">
+                        <div style="font-size: 18px; padding-top: 30px; padding-left: 30px; font-family: 'Times New Roman'; font-weight: bold">
+                            Transform MET CN to GCN Recommendation System
+                        </div>
+                    </div>
+                    <div class="layui-col-md2  layui-col-lg2 layui-col-sm2">
+                        <div style="font-size: 16px; padding-top: 30px">
+                            <a href="{% url 'download_demo_met' %}" target="_blank" id="demo"
+                               style="padding-left: 10px; color: #7CADED">Example</a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="layui-row" style="height: 780px">
+
+                    <form class="layui-form layui-row" style="padding-top: 50px" action="">
+
+                        <div class="layui-col-md10  layui-col-lg10 layui-col-sm10 layui-form-item">
+                            <label class="layui-form-label"><span style="color: red">*</span>Bam:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="title" id="upload_met_bam" lay-verify="required"
+                                       placeholder="bam file"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md2  layui-col-lg2 layui-col-sm2", style="padding-left: 12px">
+                            <button type="button" class="icono-trash" id="trash_upload_met_bam" style="color: gray"></button>
+                            <i class="icono-eye" style="color: #7CADED; padding-left: 6px"></i>
+                        </div>
+
+                        <div class="layui-col-md10  layui-col-lg10 layui-col-sm10 layui-form-item">
+                            <label class="layui-form-label"><span style="color: red">*</span>Bai:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="title" id="upload_met_bai" lay-verify="required"
+                                       placeholder="bai file"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md2  layui-col-lg2 layui-col-sm2", style="padding-left: 12px">
+                            <button type="button" class="icono-trash" id="trash_upload_met_bai" style="color: gray"></button>
+                            <i class="icono-eye" style="color: #7CADED; padding-left: 6px"></i>
+                        </div>
+
+                        <div class="layui-col-md10  layui-col-lg10 layui-col-sm10 layui-form-item">
+                            <label class="layui-form-label"><span style="color: red">*</span>Gene:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="title" id="upload_met_gene" lay-verify="required"
+                                       placeholder="gene level result"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md2  layui-col-lg2 layui-col-sm2", style="padding-left: 12px">
+                            <button type="button" class="icono-trash" id="trash_upload_met_gene" style="color: gray"></button>
+                            <i class="icono-eye" style="color: #7CADED; padding-left: 6px"></i>
+                        </div>
+
+
+                        <div class="layui-col-md10  layui-col-lg10 layui-col-sm10 layui-form-item">
+                            <label class="layui-form-label"><span style="color: red">*</span>output:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="output" lay-verify="required" id="output"
+                                       placeholder="output name"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md2  layui-col-lg2 layui-col-sm2" , style="padding-left: 12px">
+                            <button type="button" class="icono-trash" id="trash_output" style="color: gray"></button>
+                            <i class="icono-eye" style="color: #7CADED; padding-left: 6px"></i>
+                        </div>
+
+                        <input type="text" name="job_id" id="job_id" required lay-verify="required" value="{{ job_id }}"
+                               style="display: none">
+
+
+                        <div class="layui-form-item layui-col-md-offset7" style="padding-top: 20px">
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn" lay-submit  lay-filter="form-submit" id="form-submit" style="background:  #7CADED">
+                                    Submit
+                                </button>
+{#                                <button class="layui-btn" lay-submit lay-filter="form-submit" id="form-submit"#}
+{#                                        style="display: none">#}
+{#                                </button>#}
+                                <button type="reset" class="layui-btn layui-btn-primary">Reset</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="layui-col-md6">
+            <div class="layui-row layui-bg-white" style="height: 900px">
+
+                <div class="layui-tab layui-tab-brief" lay-filter="TabBrief"
+                     style="margin-top: 0px; margin-left: 25px; margin-right: 25px">
+                    <ul class="layui-tab-title">
+                        <li id="head1" class="layui-this">Overview</li>
+                        <li id="head2">Parameters</li>
+                        <li id="head3">Report</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div id="body1" class="layui-tab-item  layui-show">
+                            <h2 style="padding-bottom: 25px; font-weight: bold;">Overview</h2>
+                            <p>"Currently, in clinical practice, the detection of MET amplification through NGS is largely based on the principle of read depth, which ultimately calculates the amplification multiple of MET relative to normal cells. However, since the samples used in NGS sequencing are not all tumor tissues and include a portion of normal tissues, the NGS results cannot truly reflect the absolute copy number of MET in tumor cells.
+In addition, MET gene amplification including focal amplification and polysomy. Focal amplification refers to an increase in the copy number of the MET gene (or the surrounding region), while the copy number of genes in other chromosomal regions does not change significantly. Polysomy refers to an increase in the copy number of the entire chromosome (or a large section of the chromosome).
+We will use the NGS CNV results to estimate the proportion of tumor content in the sample, and convert the CN (Copy number) value of MET into GCN (gene copy number). Also, We will  use the CNV results of multiple genes identified by NGS and the changes in heterozygous SNP VAF to distinguish whether the amplification type of MET belongs to focal or polysomy."
+</p>
+
+                        </div>
+                        <div id="body2" class="layui-tab-item">
+                            <p style="font-weight: bold; padding-bottom: 10px">Gene</p>
+                            <p style=" padding-bottom: 20px;padding-left: 20px">Input the case sample's cnv file, which need a fixed format.</p>
+
+                            <p style="font-weight: bold; padding-bottom: 10px">Bam, Bai</p>
+                            <p style=" padding-bottom: 20px;padding-left: 20px">Input the case sample‘s bam file, which needs to be sorted and indexed.</p>
+
+                            <p style="font-weight: bold; padding-bottom: 10px">Output</p>
+                            <p style=" padding-bottom: 20px;padding-left: 20px">It can be the name of the output sample</p>
+
+                        </div>
+                        <div id="body3" class="layui-tab-item">
+                            <table id="result" lay-filter="result"></table>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script src="{% static '/js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static '/layuiadmin/layui/layui.js' %}"></script>
+
+<script>
+
+    layui.config({
+        base: '{% static "layuiadmin/" %}'
+    }).extend({
+        index: 'lib/index',
+    }).use(['index', 'form', 'table', 'upload', 'colorpicker'], function () {
+        let $ = layui.$
+            , layer = layui.layer
+            , upload = layui.upload
+            , table = layui.table
+            , form = layui.form;
+
+
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+
+        table.render({
+            elem: '#result'
+            , page: false
+            , data: [['', '', '', '', '', '']]
+            , cols: [[ //表头
+                {field: 'Sample', title: 'Sample', align: "center"}
+                ,{field: 'MET_CN', title: 'MET_CN', align: "center"}
+                ,{field: 'Adjust_purity', title: 'Adjust_purity', align: "center"}
+                ,{field: 'Adjust_GCN', title: 'Adjust_GCN', align: "center"}
+                ,{field: 'MET_NGS_State', title: 'MET_NGS_State', align: "center"}
+                ,{field: 'NGS_Polysomy', title: 'NGS_Polysomy', align: "center"}
+            ]]
+        });
+
+        {#上传文件#}
+        let uploadMetBamInst = upload.render({
+            elem: '#upload_met_bam',
+            auto: true,
+            accept: "file",
+            acceptMime: "file/zip",
+            url: "{% url 'upload_met_bam' %}",
+            method: 'post',
+            data: {job_id: $('#job_id').val()},
+            choose: function (obj) {
+                obj.preview(function (index, file, result) {
+                    $('#upload_met_bam').val(file.name); // 将文件名显示在输入框中
+                });
+            },
+            before: function (obj) {
+
+                layer.load(1, {shade: 0.3}); //上传loading
+
+            },
+            done: function (res) {
+                // 成功后提交表单
+                layer.closeAll();
+                console.log("successfully upload");
+            },
+            error: function () {
+                // 上传失败的回调函数
+                layer.closeAll();
+                layer.msg('fail to upload');
+            },
+        });
+
+        let uploadMetBaiInst = upload.render({
+            elem: '#upload_met_bai',
+            auto: true,
+            accept: "file",
+            acceptMime: "file/zip",
+            url: "{% url 'upload_met_bai' %}",
+            method: 'post',
+            data: {job_id: $('#job_id').val()},
+            choose: function (obj) {
+                obj.preview(function (index, file, result) {
+                    $('#upload_met_bai').val(file.name); // 将文件名显示在输入框中
+                });
+            },
+            before: function (obj) {
+
+                layer.load(1, {shade: 0.3}); //上传loading
+            },
+            done: function (res) {
+                // 成功后提交表单
+                layer.closeAll();
+                console.log("successfully upload");
+            },
+            error: function () {
+                // 上传失败的回调函数
+                layer.closeAll();
+                layer.msg('fail to upload');
+            },
+        });
+
+        let uploadMetGeneInst = upload.render({
+            elem: '#upload_met_gene',
+            auto: true,
+            accept: "file",
+            acceptMime: "file/zip",
+            url: "{% url 'upload_met_gene' %}",
+            method: 'post',
+            data: {job_id: $('#job_id').val()},
+            choose: function (obj) {
+                obj.preview(function (index, file, result) {
+                    $('#upload_met_gene').val(file.name); // 将文件名显示在输入框中
+                });
+            },
+            before: function (obj) {
+
+                layer.load(1, {shade: 0.3}); //上传loading
+
+            },
+            done: function (res) {
+                // 成功后提交表单
+                layer.closeAll();
+                console.log("successfully upload");
+            },
+            error: function () {
+                // 上传失败的回调函数
+                layer.closeAll();
+                layer.msg('fail to upload');
+            },
+        });
+
+        form.on('submit(form-submit)', function (data) {
+            layer.load(1, {shade: 0.3});
+            $.ajax({
+                url: '{% url "analyze_met" %}',
+                type: 'POST',
+                data: data["field"],
+
+                beforeSend: function () {
+                    layer.load(1, {shade: 0.3});
+                },
+
+                success: function (response) {
+
+                    // 重载结果表
+                    table.reload("result", {data: response["data"]});
+                    $("#head1").attr("class", "");
+                    $("#head2").attr("class", "");
+                    $("#head3").attr("class", "layui-this");
+
+                    $("#body1").attr("class", "layui-tab-item ");
+                    $("#body2").attr("class", "layui-tab-item ");
+                    $("#body3").attr("class", "layui-tab-item  layui-show");
+
+                    layer.closeAll();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    layer.closeAll();
+                    layer.msg("Data analysis error。");
+                    console.error(textStatus, errorThrown); // 处理错误响应
+                }
+            });
+
+            return false;
+        });
+
+        // 垃圾桶按钮
+        $("#trash_upload_met_bam").click(function () {
+            uploadMetBamInst.reload();
+            $("#upload_met_bam").val(undefined);
+        });
+
+        $("#trash_upload_met_bai").click(function () {
+            uploadMetBaiInst.reload();
+            $("#upload_met_bai").val(undefined);
+        });
+
+        $("#trash_upload_met_gene").click(function () {
+            uploadMetGeneInst.reload();
+            $("#upload_met_gene").val(undefined);
+        });
+
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CNV recom 英文界面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="{% static 'layuiadmin/layui/css/layui.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'layuiadmin/style/admin.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'css/icono.min.css' %}" media="all">
+</head>
+
+<style>
+    .layui-table-tool {
+        background-color: #FEFFFF;
+    }
+
+    .layui-table {
+        width: 100%;
+        margin: 15px 0;
+        border: 0;
+    }
+
+    .layui-table th {
+        background-color: #C3E7FA;
+        color: #000000
+    }
+
+    .layui-table th, .layui-table td {
+        border: 1px solid #dcf1fc;
+        border-width: 1px 0 1px 0
+    }
+
+    .layui-table tr {
+        border: 1px solid #dcf1fc;
+    }
+
+    .layui-table tr:nth-child(odd) {
+        background-color: #ebf7fd;
+    }
+
+    .layui-table tr:nth-child(even) {
+        background-color: #fdfdfd;
+    }
+
+    .layui-table-view .layui-table[lay-size=sm] .layui-table-cell {
+        height: 26px;
+        line-height: 20px;
+    }
+
+    .layui-tab-title {
+
+        line-height: 80px;
+        height: 110px;
+        font-size: 16px;
+
+    }
+
+    .layui-tab-brief > .layui-tab-title .layui-this {
+        color: #7CADED;
+    }
+
+</style>
+
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-row  layui-col-space10">
+
+        <div class="layui-col-md6 layui-col-lg6 layui-col-sm6">
+            <div class="layui-row layui-bg-white">
+
+                <div class="layui-row" style="height: 100px">
+                    <div class="layui-col-md10  layui-col-lg10 layui-col-sm10">
+                        <div style="font-size: 18px; padding-top: 30px; padding-left: 30px; font-family: 'Times New Roman'; font-weight: bold">Copy Number Variation
+                            Detection Software Recommendation System
+                        </div>
+                    </div>
+                    <div class="layui-col-md2  layui-col-lg2 layui-col-sm2">
+                        <div style="font-size: 16px; padding-top: 30px">
+                            <a href="{% url 'download_demo' %}" target="_blank" id="demo"
+                               style="padding-left: 10px; color: #7CADED">Example</a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="layui-row" style="height: 780px">
+
+                    <form class="layui-form layui-row" style="padding-top: 50px" action="">
+
+                        <div class="layui-col-md10  layui-col-lg10 layui-col-sm10 layui-form-item">
+                            <label class="layui-form-label"><span style="color: red">*</span>INPUT:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="title" id="input_upload" lay-verify="required"
+                                       placeholder="-c case.bam case.bam.bai -n control.bam control.bam.bai -t chip.bed"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md2  layui-col-lg2 layui-col-sm2" , style="padding-left: 12px">
+                            <button type="button" class="icono-trash" id="trash_file" style="color: gray"></button>
+                            <i class="icono-eye" style="color: #7CADED; padding-left: 6px"></i>
+                        </div>
+
+                        <div class="layui-col-md10  layui-col-lg10 layui-col-sm10 layui-form-item">
+                            <label class="layui-form-label"><span style="color: red">*</span>Parameters:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="args" lay-verify="required" id="args"
+                                       placeholder="-p purity -l read length -d sampleDepth"
+                                       autocomplete="off" class="layui-input">
+                                {#                                -p 0 -l 101 -d 100#}
+                            </div>
+                        </div>
+                        <div class="layui-col-md2  layui-col-lg2 layui-col-sm2" , style="padding-left: 12px">
+                            <i class="icono-trash" id="trash_args" style="color: gray"></i>
+                            <i class="icono-eye" style="color: #7CADED; padding-left: 6px"></i>
+                        </div>
+
+                        <div class="layui-col-md10  layui-col-lg10 layui-col-sm10 layui-form-item">
+                            <label class="layui-form-label"><span style="color: red">*</span>Output:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="output" lay-verify="required" id="output"
+                                       placeholder="output"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+
+                        <input type="text" name="job_id" id="job_id" required lay-verify="required" value="{{ job_id }}"
+                               style="display: none">
+
+
+                        <div class="layui-form-item layui-col-md-offset7" style="padding-top: 20px">
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn" id="btn-upload" style="background:  #7CADED">
+                                    Submit
+                                </button>
+                                <button class="layui-btn" lay-submit lay-filter="form-submit" id="form-submit"
+                                        style="display: none">
+                                </button>
+                                <button type="reset" class="layui-btn layui-btn-primary">Reset</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="layui-col-md6">
+            <div class="layui-row layui-bg-white" style="height: 900px">
+
+                <div class="layui-tab layui-tab-brief" lay-filter="TabBrief"
+                     style="margin-top: 0px; margin-left: 25px; margin-right: 25px">
+                    <ul class="layui-tab-title">
+                        <li id="head1" class="layui-this">Overview</li>
+                        <li id="head2">Parameters</li>
+                        <li id="head3">Report</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div id="body1" class="layui-tab-item  layui-show">
+                            <h2 style="padding-bottom: 25px; font-weight: bold;">Overview</h2>
+                            <p>"CNVrecom is a copy number variation (CNV) detection software recommendation algorithm developed based on meta-learning, meta-paths, and deep graph neural network technologies. We transform the issue of user-selected CNV detection tools (CDTs) into a problem of automatically recommending tools to users based on a meta-learning framework. Meta-learning can capture complex relationships between multiple standards by learning from a large amount of training data. It can generate personalized recommendations based on the individual features and needs of samples. A key advantage of meta-learning models is that they can learn and adapt to new samples quickly. By leveraging complex meta-learning models, we can effectively solve the problem of integrating multiple standards and provide more accurate and personalized recommendations for CNV detection software.
+We construct a meta-path heterogeneous graph using meta-features and meta-paths, which not only fully utilizes the characteristics of sequencing samples and CDTs, but also enhances the semantic interpretation of recommendations. The advantage of meta-path heterogeneous graphs lies in their ability to capture complex relationships between samples and tools in the CNV detection problem. Specifically, meta-path heterogeneous graphs integrate the characteristics of samples and CNV detection tools, allowing us to model their association by defining different meta-paths and augmenting the training set. This enables us to more comprehensively capture the interactions and dependencies between samples and tools, thereby improving the recommendation accuracy and performance of CNV detection software.
+Finally, we developed a recommendation model by combining a meta-path heterogeneous graph with meta-objectives and an R-GCN-based encoder. Therefore, CNVrecom can automatically recommend suitable CNV tools to users based on the characteristics of sequencing samples, without the need for users to have domain knowledge. CNVrecom is very helpful for CNV detection tools in medical applications, providing more scientific, systematic, and effective guidance for the selection and use of CNVs detection tools, thereby improving the precision detection of CNVs, deepening the understanding of disease pathogenesis, and providing new ideas for disease diagnosis and treatment."
+</p>
+                            <h2 style="padding-bottom: 25px; padding-top: 50px; font-weight: bold;">PS:</h2>
+                            <p>More details: CNVrecom: How to Recommend the Suitable Copy Number Variations Detection Tools for Users?</p>
+
+
+                        </div>
+                        <div id="body2" class="layui-tab-item">
+                            <p style="font-weight: bold; padding-bottom: 10px">-c case.bam, case.bam.bai</p>
+                            <p style=" padding-bottom: 20px;padding-left: 20px">Input the case sample's bam file, which needs to be sorted and indexed.</p>
+
+                            <p style="font-weight: bold; padding-bottom: 10px">-n control.bam, control.bam.bai</p>
+                            <p style=" padding-bottom: 20px;padding-left: 20px">Input the case sample‘s bam file, which needs to be sorted and indexed.</p>
+
+                            <p style="font-weight: bold; padding-bottom: 10px">-t chip.bed</p>
+                            <p style=" padding-bottom: 20px;padding-left: 20px">Input Sample Sequencing Capture Interval (bed file).</p>
+                            <p style="font-weight: bold; padding-bottom: 10px">-p purity</p>
+                            <p style=" padding-bottom: 20px;padding-left: 20px">e.g.  “-p 0.6” indicates that the input tumor purity is 0.6. Note: The tumor purity of the input sample is required.
+	It is recommended to use the ABSOLUTE tool to estimate the tumor purity of the sample.。
+</p>
+                            <p style="font-weight: bold; padding-bottom: 10px">-l read length</p>
+                            <p style=" padding-bottom: 20px;padding-left: 20px">e.g. "-l 150" indicates that the input read length is 150bp. Note: This can be obtained using tools like samtools or pysam.</p>
+
+                            <p style="font-weight: bold; padding-bottom: 10px">-d sampleDepth</p>
+                            <p style=" padding-bottom: 20px;padding-left: 20px">e.g.  "-d 100" indicates that the input sample's average depth is 100X. Note: This can be obtained using tools like samtools or pysam.</p>
+
+                        </div>
+                        <div id="body3" class="layui-tab-item">
+                            <table id="result" lay-filter="result"></table>
+                            <p style="color: grey; padding-top: 20px">
+                                Report Explanation: The first row in the report represents the selected meta-targets, and the second row represents the     recommendations given by CNVrecom under these chosen meta-targets.
+</p>
+                            <p style="color: grey">
+                                For example, the first column indicates that when Sensitivity is selected as the meta-target, CNVrecom recommends using 'contra' as the CNV detection tool for this sample.
+</p>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<script src="{% static '/js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static '/layuiadmin/layui/layui.js' %}"></script>
+
+<script>
+
+    layui.config({
+        base: '{% static "layuiadmin/" %}'
+    }).extend({
+        index: 'lib/index',
+    }).use(['index', 'form', 'table', 'upload', 'colorpicker'], function () {
+        let $ = layui.$
+            , layer = layui.layer
+            , upload = layui.upload
+            , table = layui.table
+            , form = layui.form;
+
+
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+
+        table.render({
+            elem: '#result'
+            , page: false
+            , data: [['', '', '']]
+            , cols: [[ //表头
+                {field: 'meta-target-Sensitivity', title: 'meta-target-Sensitivity', align: "center"}
+                , {field: 'meta-target-Precision', title: 'meta-target-Precision', align: "center"}
+                , {field: 'meta-target-F1_score', title: 'meta-target-F1_score', align: "center"}
+            ]]
+        });
+
+        {#上传文件#}
+        let uploadInst = upload.render({
+            elem: '#input_upload',
+            auto: false,
+            bindAction: '#btn-upload',
+            accept: "file",
+            acceptMime: "file/zip",
+            url: "{% url 'upload' %}",
+            method: 'post',
+            data: {job_id: $('#job_id').val()},
+            choose: function (obj) {
+                obj.preview(function (index, file, result) {
+                    $('#input_upload').val(file.name); // 将文件名显示在输入框中
+                });
+            },
+            before: function (obj) {
+
+                if ($("#args").val() === '') {
+                    layer.msg("Please fill in the correct parameters");
+                    return false;
+                } else if ($("#output").val() === '') {
+                    layer.msg("Please fill in the correct output directory");
+                    return false;
+                } else {
+                    layer.load(1, {shade: 0.3}); //上传loading
+                }
+
+            },
+            done: function (res) {
+                // 成功后提交表单
+                layer.closeAll();
+                console.log("successfully upload");
+                $("#form-submit").click();
+            },
+            error: function () {
+                // 上传失败的回调函数
+                layer.closeAll();
+                layer.msg('fail to upload');
+            },
+        });
+
+        form.on('submit(form-submit)', function (data) {
+            layer.load(1, {shade: 0.3});
+            $.ajax({
+                url: '{% url "analyze" %}',
+                type: 'POST',
+                data: data["field"],
+                success: function (response) {
+
+                    // 重载结果表
+                    table.reload("result", {data: response["data"]});
+                    $("#head1").attr("class", "");
+                    $("#head2").attr("class", "");
+                    $("#head3").attr("class", "layui-this");
+
+                    $("#body1").attr("class", "layui-tab-item ");
+                    $("#body2").attr("class", "layui-tab-item ");
+                    $("#body3").attr("class", "layui-tab-item  layui-show");
+
+                    layer.closeAll();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    layer.closeAll();
+                    layer.msg("Data analysis error。");
+                    console.error(textStatus, errorThrown); // 处理错误响应
+                }
+            });
+
+            return false;
+        });
+
+        // 垃圾桶按钮
+        $("#trash_file").click(function () {
+            uploadInst.reload();
+            $("#input_upload").val(undefined);
+        });
+
+        $("#trash_args").click(function () {
+            uploadInst.reload();
+            $("#args").val(undefined);
+        })
+
+
+    });
+</script>
+</body>
+</html>
